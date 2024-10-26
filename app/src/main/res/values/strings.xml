@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Fuel Calculator</string>
+    <string name="enjoy_hassle_free_fuel_savings">Enjoy hassle-free fuel savings</string>
+    <string name="app_logo">Gasify Logo</string>
+    <string name="car_illustration">Car Illustration</string>
+    <string name="get_started">Get Started</string>
+    <string name="gasify_logo">Gasify Logo</string>
+    <string name="car_image">Car Image</string>
 </resources>

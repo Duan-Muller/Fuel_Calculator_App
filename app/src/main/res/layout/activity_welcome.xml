@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    app:flow_horizontalAlign="center">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="234dp"
+        android:src="@drawable/gasify_high_resolution_logo_transparent"
+        android:contentDescription="@string/gasify_logo" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/carAnimation"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        app:lottie_rawRes="@raw/car_animation"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/enjoy_hassle_free_fuel_savings"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/startBtn"
+        android:layout_width="243dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="55dp"
+        android:backgroundTint="#6B00FF"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/get_started"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>
