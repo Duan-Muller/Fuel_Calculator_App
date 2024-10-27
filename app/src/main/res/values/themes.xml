@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base application theme -->
-    <style name="Theme.FuelCalculator" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.FuelCalculator" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color -->
         <item name="colorPrimary">#6B00FF</item>
         <item name="colorPrimaryVariant">#5600CC</item>

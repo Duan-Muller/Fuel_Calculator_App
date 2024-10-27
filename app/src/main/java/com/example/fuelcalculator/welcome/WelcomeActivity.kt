@@ -6,8 +6,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import com.airbnb.lottie.LottieAnimationView
-import com.example.fuelcalculator.MainActivity
 import com.example.fuelcalculator.R
+import com.example.fuelcalculator.auth.AuthActivity
 
 class WelcomeActivity : AppCompatActivity(), WelcomeContract.View {
 
@@ -22,7 +22,7 @@ class WelcomeActivity : AppCompatActivity(), WelcomeContract.View {
 
             val carAnimation = findViewById<LottieAnimationView>(R.id.carAnimation)
 
-            // Use local animation instead of URL
+            // Use local animation
             carAnimation.setAnimation(R.raw.car_animation)
             carAnimation.repeatCount = -1  // Infinite loop
             carAnimation.speed = 1f        // Normal speed
@@ -48,7 +48,7 @@ class WelcomeActivity : AppCompatActivity(), WelcomeContract.View {
 
     override fun navigateToMain() {
         try {
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, AuthActivity::class.java))
             finish()
         } catch (e: Exception) {
             Log.e(TAG, "Error navigating to main", e)

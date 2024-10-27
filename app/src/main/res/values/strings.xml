@@ -6,4 +6,15 @@
     <string name="get_started">Get Started</string>
     <string name="gasify_logo">Gasify Logo</string>
     <string name="car_image">Car Image</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="email_input">Enter your email</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="password_input">Enter your password</string>
+    <string name="remember">Remember me</string>
+    <string name="password_forgot">Forgot password ?</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="confirm_password_input">Confirm Password</string>
+    <string name="already_have_account">Already have an account ?</string>
 </resources>

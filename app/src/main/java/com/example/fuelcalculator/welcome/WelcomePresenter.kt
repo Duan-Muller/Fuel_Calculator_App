@@ -3,7 +3,7 @@ package com.example.fuelcalculator.welcome
 class WelcomePresenter(private var view: WelcomeContract.View?) : WelcomeContract.Presenter {
 
     override fun onGetStartedClicked() {
-        //Handle the get started button click
+        //TODO Handle the get started button click
         view?.navigateToMain()
     }
 

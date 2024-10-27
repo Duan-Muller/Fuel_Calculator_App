@@ -61,5 +61,4 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
-
 }

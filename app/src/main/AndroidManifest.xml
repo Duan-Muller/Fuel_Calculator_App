@@ -24,6 +24,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".auth.AuthActivity"
+            android:exported="true"/>
+
     </application>
 
 </manifest>
