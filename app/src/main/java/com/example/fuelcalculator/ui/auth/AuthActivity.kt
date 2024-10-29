@@ -1,4 +1,4 @@
-package com.example.fuelcalculator.auth
+package com.example.fuelcalculator.ui.auth
 
 import android.content.Intent
 import android.os.Bundle

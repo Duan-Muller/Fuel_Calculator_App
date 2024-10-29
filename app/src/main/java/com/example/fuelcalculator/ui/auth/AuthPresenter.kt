@@ -1,4 +1,4 @@
-package com.example.fuelcalculator.auth
+package com.example.fuelcalculator.ui.auth
 
 class AuthPresenter(private var view: AuthContract.View?) : AuthContract.Presenter {
     override fun onLoginTabSelected() {

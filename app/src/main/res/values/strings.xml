@@ -17,4 +17,8 @@
     <string name="confirm_password">Confirm password</string>
     <string name="confirm_password_input">Confirm Password</string>
     <string name="already_have_account">Already have an account ?</string>
+    <string name="fuel_expense_title">Fuel Expense For This Month</string>
+    <string name="report_button">report button</string>
+    <string name="trip_button">trip button\n</string>
+    <string name="profile_button">profile button</string>
 </resources>

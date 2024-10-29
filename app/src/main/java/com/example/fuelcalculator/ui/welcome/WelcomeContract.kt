@@ -1,4 +1,4 @@
-package com.example.fuelcalculator.welcome
+package com.example.fuelcalculator.ui.welcome
 
 interface WelcomeContract {
     interface View {

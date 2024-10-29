@@ -1,4 +1,4 @@
-package com.example.fuelcalculator.welcome
+package com.example.fuelcalculator.ui.welcome
 
 class WelcomePresenter(private var view: WelcomeContract.View?) : WelcomeContract.Presenter {
 

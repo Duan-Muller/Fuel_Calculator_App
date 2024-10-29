@@ -1,4 +1,4 @@
-package com.example.fuelcalculator.welcome
+package com.example.fuelcalculator.ui.welcome
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import com.airbnb.lottie.LottieAnimationView
 import com.example.fuelcalculator.R
-import com.example.fuelcalculator.auth.AuthActivity
+import com.example.fuelcalculator.ui.auth.AuthActivity
 
 class WelcomeActivity : AppCompatActivity(), WelcomeContract.View {
 
