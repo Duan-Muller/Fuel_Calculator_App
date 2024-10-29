@@ -40,6 +40,28 @@ android {
 }
 
 dependencies {
+
+    // Firebase BoM (Bill of Materials)
+    implementation(platform(libs.firebase.bom))
+
+    // Firebase Authentication
+    implementation(libs.firebase.auth.ktx)
+
+    // Firebase Core
+    implementation(libs.firebase.core)
+
+    // Firestore
+    implementation(libs.firebase.firestore.ktx)
+
+    // Google Play Services
+    implementation(libs.play.services.auth)
+    implementation (libs.play.services.base)
+    implementation (libs.androidx.multidex)
+
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.play.services)
+
+    implementation(libs.androidx.cardview)
     implementation(libs.lottie.compose)
     implementation("com.google.android.material:material:1.12.0")
     implementation(libs.androidx.appcompat)
@@ -52,6 +74,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -62,3 +85,5 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
 }
+
+apply(plugin = "com.google.gms.google-services")

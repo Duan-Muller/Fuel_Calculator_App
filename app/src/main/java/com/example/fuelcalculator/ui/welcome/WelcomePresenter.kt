@@ -4,7 +4,7 @@ class WelcomePresenter(private var view: WelcomeContract.View?) : WelcomeContrac
 
     override fun onGetStartedClicked() {
         //TODO Handle the get started button click
-        view?.navigateToMain()
+        view?.navigateToAuth()
     }
 
     override fun onDestroy() {

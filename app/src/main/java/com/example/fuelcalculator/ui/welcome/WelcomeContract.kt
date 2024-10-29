@@ -2,7 +2,7 @@ package com.example.fuelcalculator.ui.welcome
 
 interface WelcomeContract {
     interface View {
-        fun navigateToMain()
+        fun navigateToAuth()
     }
 
     interface Presenter {

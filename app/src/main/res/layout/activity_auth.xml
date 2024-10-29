@@ -50,20 +50,63 @@
                 android:text="@string/signup" />
 
         </com.google.android.material.tabs.TabLayout>
+
+        <!-- Username -->
+        <TextView
+            android:id="@+id/usernameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/username"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/usernameLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:boxBackgroundColor="@android:color/transparent"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxStrokeColor="@color/black"
+            app:boxStrokeWidth="2dp"
+            app:endIconDrawable="@drawable/ic_person"
+            app:endIconMode="custom"
+            app:hintEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/usernameInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="@string/username_input"
+                android:inputType="textPersonName"
+                android:padding="16dp"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <!-- Email -->
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/emailInputText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/email"
             android:textColor="@color/black"
             android:textSize="18sp"
+            android:visibility="gone"
             android:layout_marginTop="16dp"
             android:layout_marginStart="32dp"
             />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
+            android:id="@+id/emailInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
 
             android:layout_width="match_parent"
@@ -76,6 +119,7 @@
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusTopStart="8dp"
+            android:visibility="gone"
             app:boxStrokeColor="@color/black"
             app:boxStrokeWidth="2dp"
             app:endIconDrawable="@drawable/ic_mail"
@@ -132,6 +176,7 @@
                 android:padding="16dp"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <!-- Confirm Password -->
         <TextView
             android:id="@+id/confirmPasswordText"
@@ -282,6 +327,13 @@
                     app:tint="#FFFFFF"/>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
