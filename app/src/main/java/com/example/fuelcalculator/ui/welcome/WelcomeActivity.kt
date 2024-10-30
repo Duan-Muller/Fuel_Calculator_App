@@ -9,7 +9,7 @@ import com.airbnb.lottie.LottieAnimationView
 import com.example.fuelcalculator.R
 import com.example.fuelcalculator.data.repository.SessionManager
 import com.example.fuelcalculator.ui.auth.AuthActivity
-import com.example.fuelcalculator.ui.home.HomeActivity
+import com.example.fuelcalculator.ui.main.MainActivity
 
 class WelcomeActivity : AppCompatActivity(), WelcomeContract.View {
 
@@ -25,7 +25,7 @@ class WelcomeActivity : AppCompatActivity(), WelcomeContract.View {
             //Initialize session and check login status
             sessionManager = SessionManager(this)
             if (sessionManager.isLoggedIn()) {
-                startActivity(Intent(this, HomeActivity::class.java))
+                startActivity(Intent(this, MainActivity::class.java))
                 finish()
                 return
             }

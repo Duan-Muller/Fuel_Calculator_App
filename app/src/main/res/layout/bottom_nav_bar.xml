@@ -19,12 +19,14 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/ivNavHome"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_home"
             app:tint="#6B00FF" />
 
         <TextView
+            android:id="@+id/tvNavHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -43,12 +45,14 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/ivNavLocate"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_location"
             app:tint="#666666" />
 
         <TextView
+            android:id="@+id/tvNavLocate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -67,12 +71,14 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/ivNavVehicles"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_vehicles"
             app:tint="#666666" />
 
         <TextView
+            android:id="@+id/tvNavVehicles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -91,12 +97,14 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/ivNavCalculator"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_calculator"
             app:tint="#666666" />
 
         <TextView
+            android:id="@+id/tvNavCalculator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"

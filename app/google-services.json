@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "968421360491",
+    "project_id": "gasify-fuel-calculator",
+    "storage_bucket": "gasify-fuel-calculator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968421360491:android:59468e53b25d959d2c422e",
+        "android_client_info": {
+          "package_name": "com.example.fuelcalculator"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzgyn_4eHNy3MKb8vaOPhYZS4jZW5Xwvk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

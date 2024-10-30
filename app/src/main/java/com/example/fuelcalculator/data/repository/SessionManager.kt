@@ -14,6 +14,7 @@ class SessionManager(context: Context) {
         private const val KEY_IS_LOGGED_IN = "is_logged_in"
     }
 
+    //Create login session adding username, login status and adding if remember me was enabled
     fun createLoginSession(username: String, rememberMe: Boolean) {
         prefs.edit().apply{
             putBoolean(KEY_IS_LOGGED_IN, true)
@@ -23,15 +24,17 @@ class SessionManager(context: Context) {
         }
     }
 
+    //Getting saved username to display in settings page
     fun getSavedUsername():String?{
         return prefs.getString(KEY_USERNAME, null)
     }
 
+    //Checking login status
     fun isLoggedIn(): Boolean {
         return prefs.getBoolean(KEY_IS_LOGGED_IN, false)
     }
 
-
+    //Call to log out user
     fun clearSession(){
         prefs.edit().apply{
             clear()
@@ -39,6 +42,7 @@ class SessionManager(context: Context) {
         }
     }
 
+    //Checking if remember me was enabled
     fun isRememberMeEnabled(): Boolean = prefs.getBoolean(KEY_REMEMBER_ME, false)
 
 }

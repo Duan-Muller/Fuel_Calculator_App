@@ -82,8 +82,10 @@ class AuthPresenter(
         //Validating sign up inputs
         if (!validateSignupInputs(trimmedUsername, trimmedEmail, password)) return
 
+        //Show loading to user
         view?.showLoading()
 
+        //Hide loading and display success if user signup was successful
         viewModelScope.launch {
             authManager.signUp(username, email, password).fold(
                 onSuccess = { user ->
@@ -191,6 +193,7 @@ class AuthPresenter(
         return true
     }
 
+    //Default checks firebase throws for certain criteria
     private fun handleFirebaseAuthError(exception: Throwable) {
         when(exception) {
             is FirebaseAuthWeakPasswordException -> {
@@ -223,6 +226,7 @@ class AuthPresenter(
         view?.showError("Github Sign In coming soon")
     }
 
+    //Forgot Password handling to send email to reset password
     override fun onForgotPasswordClicked() {
         val email = view?.getCurrentEmail() ?: ""
         if (email.isEmpty() || !isValidEmail(email)) {

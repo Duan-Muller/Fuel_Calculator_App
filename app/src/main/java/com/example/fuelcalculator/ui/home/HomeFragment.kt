@@ -1,19 +1,22 @@
 package com.example.fuelcalculator.ui.home
 
-import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fuelcalculator.R
 import com.example.fuelcalculator.data.model.RefuelRecord
 import com.example.fuelcalculator.data.repository.FirebaseAuthManager
-import com.example.fuelcalculator.ui.settings.SettingsActivity
+import com.example.fuelcalculator.ui.main.MainActivity
 import com.google.android.material.button.MaterialButton
 
-class HomeActivity :  AppCompatActivity(), HomeContract.View {
+class HomeFragment :  Fragment(), HomeContract.View {
 
+    //Presenter and Firebase Auth initialization
     private lateinit var presenter: HomeContract.Presenter
     private lateinit var authManager: FirebaseAuthManager
 
@@ -25,27 +28,36 @@ class HomeActivity :  AppCompatActivity(), HomeContract.View {
     private lateinit var rvRefuelHistory : RecyclerView
     private lateinit var tvSeeAll : TextView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         authManager = FirebaseAuthManager()
         presenter = HomePresenter(this, authManager)
 
-        initializeViews()
+        initializeViews(view)
         setupClickListeners()
         presenter.onViewCreated()
     }
 
-    private fun initializeViews() {
-        btnProfile = findViewById(R.id.btnProfile)
-        tvExpenseAmount = findViewById(R.id.tvExpenseAmount)
-        btnTrip = findViewById(R.id.btnTrip)
-        btnReport = findViewById(R.id.btnReport)
-        rvRefuelHistory = findViewById(R.id.rvRefuelHistory)
-        tvSeeAll = findViewById(R.id.tvSeeAll)
+    private fun initializeViews(view: View) {
+        //Initialize page elements
+        btnProfile = view.findViewById(R.id.btnProfile)
+        tvExpenseAmount = view.findViewById(R.id.tvExpenseAmount)
+        btnTrip = view.findViewById(R.id.btnTrip)
+        btnReport = view.findViewById(R.id.btnReport)
+        rvRefuelHistory = view.findViewById(R.id.rvRefuelHistory)
+        tvSeeAll = view.findViewById(R.id.tvSeeAll)
     }
 
+    //Click listeners for buttons
     private fun setupClickListeners() {
         btnProfile.setOnClickListener {
             presenter.onProfileButtonClicked()
@@ -70,7 +82,7 @@ class HomeActivity :  AppCompatActivity(), HomeContract.View {
     }
 
     override fun navigateToProfile() {
-        startActivity(Intent(this, SettingsActivity::class.java))
+        (activity as? MainActivity)?.navigateToSettings()
     }
 
     override fun navigateToAllHistory() {
@@ -78,7 +90,7 @@ class HomeActivity :  AppCompatActivity(), HomeContract.View {
     }
 
     override fun showError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun showLoading() {
@@ -96,4 +108,5 @@ class HomeActivity :  AppCompatActivity(), HomeContract.View {
     override fun showRefuelHistory(history: List<RefuelRecord>) {
         TODO("Not yet implemented")
     }
+
 }

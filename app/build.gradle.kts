@@ -41,6 +41,10 @@ android {
 
 dependencies {
 
+    //Google maps
+    implementation(libs.play.services.maps)
+    implementation(libs.places)
+
     // Firebase BoM (Bill of Materials)
     implementation(platform(libs.firebase.bom))
 

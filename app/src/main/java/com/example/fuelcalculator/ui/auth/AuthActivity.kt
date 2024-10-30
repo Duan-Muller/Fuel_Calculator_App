@@ -12,13 +12,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.fuelcalculator.R
 import com.example.fuelcalculator.data.repository.FirebaseAuthManager
 import com.example.fuelcalculator.data.repository.SessionManager
-import com.example.fuelcalculator.ui.home.HomeActivity
+import com.example.fuelcalculator.ui.home.HomeFragment
+import com.example.fuelcalculator.ui.main.MainActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textfield.TextInputEditText
 
 class AuthActivity : AppCompatActivity(), AuthContract.View {
 
+    //Finding elements on UI
     private lateinit var emailInputText: TextView
     private lateinit var emailInputLayout: TextInputLayout
     private lateinit var usernameText: TextView
@@ -47,7 +49,7 @@ class AuthActivity : AppCompatActivity(), AuthContract.View {
 
         //Check if use is logged in already
         if (sessionManager.isLoggedIn()) {
-            startActivity(Intent(this, HomeActivity::class.java))
+            startActivity(Intent(this, HomeFragment::class.java))
             finish()
             return
         }
@@ -153,7 +155,9 @@ class AuthActivity : AppCompatActivity(), AuthContract.View {
     }
 
     override fun navigateToHome() {
-        startActivity(Intent(this, HomeActivity::class.java))
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
         finish()
     }
 
