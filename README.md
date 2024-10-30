@@ -39,6 +39,7 @@ Our Fuel Calculator App is a comprehensive tool for vehicle owners to manage the
 
 - Kotlin
 - Android Studio
+- Firebase
 
 ## Contributing
 
@@ -51,4 +52,4 @@ This project is part of our final year studies. While we appreciate any feedback
 
 ---
 
-Last updated: 20/10/2024
+Last updated: 29/10/2024
