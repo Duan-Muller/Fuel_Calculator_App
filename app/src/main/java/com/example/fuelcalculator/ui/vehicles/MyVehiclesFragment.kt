@@ -18,6 +18,8 @@ import com.example.fuelcalculator.data.db.VehicleDBHelper
 import com.example.fuelcalculator.data.model.Vehicle
 import com.example.fuelcalculator.data.repository.FirebaseAuthManager
 import com.example.fuelcalculator.ui.auth.AuthActivity
+import com.example.fuelcalculator.ui.common.VehicleCategories
+import com.example.fuelcalculator.ui.vehicles.adapter.CategoryAdapter
 import com.example.fuelcalculator.ui.vehicles.adapter.VehicleAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -25,6 +27,9 @@ import com.google.android.material.textfield.TextInputEditText
 import java.util.Calendar
 
 class MyVehiclesFragment : Fragment() {
+
+    private lateinit var categoryAdapter: CategoryAdapter
+    private var currentCategory: String = "All Cars"
 
     private val authManager = FirebaseAuthManager()
 
@@ -63,6 +68,17 @@ class MyVehiclesFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
+
+        categoryAdapter = CategoryAdapter { category ->
+            currentCategory = category
+            filterVehicles()
+        }
+
+        rvCategories.apply {
+            adapter = categoryAdapter
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        }
+
         vehicleAdapter = VehicleAdapter()
         rvVehicles.apply {
             adapter = vehicleAdapter
@@ -70,6 +86,24 @@ class MyVehiclesFragment : Fragment() {
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
     }
+
+    private fun filterVehicles() {
+        try {
+            val dbHelper = VehicleDBHelper(requireContext())
+            val allVehicles = dbHelper.getVehiclesForUser(authManager.requireCurrentUserId())
+
+            val filteredVehicles = when (currentCategory) {
+                "All Cars" -> allVehicles
+                else -> allVehicles.filter { it.vehicleType == currentCategory }
+            }
+
+            vehicleAdapter.submitList(filteredVehicles)
+        } catch (e: IllegalStateException) {
+            startActivity(Intent(requireContext(), AuthActivity::class.java))
+            requireActivity().finish()
+        }
+    }
+
 
     private fun setupClickListeners() {
         btnAddVehicle.setOnClickListener {
@@ -128,7 +162,7 @@ class MyVehiclesFragment : Fragment() {
 
     private fun validateInputs(dialogView: View): Boolean {
         val fuelType = dialogView.findViewById<AutoCompleteTextView>(R.id.spinnerFuelType).text.toString()
-        val vehicleType = dialogView.findViewById<TextInputEditText>(R.id.etVehicleType).text.toString()
+        val vehicleType = dialogView.findViewById<AutoCompleteTextView>(R.id.etVehicleType).text.toString()
         val brand = dialogView.findViewById<TextInputEditText>(R.id.etBrand).text.toString()
         val model = dialogView.findViewById<TextInputEditText>(R.id.etModel).text.toString()
         val engineSize = dialogView.findViewById<TextInputEditText>(R.id.etEngineSize).text.toString()
@@ -167,7 +201,7 @@ class MyVehiclesFragment : Fragment() {
             val vehicle = Vehicle(
                 userId = userId,
                 fuelType = dialogView.findViewById<AutoCompleteTextView>(R.id.spinnerFuelType).text.toString(),
-                vehicleType = dialogView.findViewById<TextInputEditText>(R.id.etVehicleType).text.toString(),
+                vehicleType = dialogView.findViewById<AutoCompleteTextView>(R.id.etVehicleType).text.toString(),
                 brand = dialogView.findViewById<TextInputEditText>(R.id.etBrand).text.toString(),
                 model = dialogView.findViewById<TextInputEditText>(R.id.etModel).text.toString(),
                 engineSize = dialogView.findViewById<TextInputEditText>(R.id.etEngineSize).text.toString(),
@@ -189,15 +223,7 @@ class MyVehiclesFragment : Fragment() {
     }
 
     private fun refreshVehicleList() {
-        try {
-            val dbHelper = VehicleDBHelper(requireContext())
-            val vehicles = dbHelper.getVehiclesForUser(authManager.requireCurrentUserId())
-            vehicleAdapter.submitList(vehicles)
-        } catch (e: IllegalStateException) {
-            // Handle not logged in case
-            startActivity(Intent(requireContext(), AuthActivity::class.java))
-            requireActivity().finish()
-        }
+        filterVehicles()
     }
 
     private fun setupDialogSpinners(dialogView: View) {
@@ -215,6 +241,13 @@ class MyVehiclesFragment : Fragment() {
         val regionSpinner = dialogView.findViewById<AutoCompleteTextView>(R.id.spinnerRegion)
         val regions = arrayOf("Inland", "Coastal")
         regionSpinner.setAdapter(ArrayAdapter(requireContext(), R.layout.dropdown_item, regions))
+
+        // Vehicle Type Spinner
+        val vehicleTypeSpinner = dialogView.findViewById<AutoCompleteTextView>(R.id.etVehicleType)
+        val categories = VehicleCategories.CATEGORIES.filter { it != "All Cars" }
+        vehicleTypeSpinner.setAdapter(
+            ArrayAdapter(requireContext(), R.layout.dropdown_item, categories)
+        )
     }
 
     private fun showError(message: String) {
