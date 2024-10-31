@@ -13,12 +13,6 @@ class FirebaseAuthManager {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
 
-    fun getCurrentUserId(): String? = auth.currentUser?.uid
-
-    fun requireCurrentUserId(): String {
-        return getCurrentUserId() ?: throw IllegalStateException("No authenticated user found")
-    }
-
     suspend fun signUp(username: String, email: String, password: String): Result<FirebaseUser> = withContext(
         Dispatchers.IO) {
         try {
@@ -78,6 +72,12 @@ class FirebaseAuthManager {
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    fun getCurrentUserId(): String? = auth.currentUser?.uid
+
+    fun requireCurrentUserId(): String {
+        return getCurrentUserId() ?: throw IllegalStateException("No authenticated user found")
     }
 
     fun getCurrentUser(): FirebaseUser? = auth.currentUser
