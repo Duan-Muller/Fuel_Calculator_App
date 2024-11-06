@@ -102,7 +102,7 @@ class CalculatorFragment : Fragment() {
 
     private fun updateCostInputFields(costType: String, container: LinearLayout) {
         //Hide all fields initially
-        container.findViewById<TextInputLayout>(R.id.tilFuelConsumption)?.visibility = View.GONE
+        container.findViewById<TextInputLayout>(R.id.tilFuelAmount)?.visibility = View.GONE
         container.findViewById<TextInputLayout>(R.id.tilPricePerUnit)?.visibility = View.GONE
         container.findViewById<TextInputLayout>(R.id.tilDistance)?.visibility = View.GONE
         container.findViewById<TextInputLayout>(R.id.tilBudget)?.visibility = View.GONE
@@ -110,11 +110,11 @@ class CalculatorFragment : Fragment() {
         //Show relevant fields based on calculation type
         when (costType) {
             "Total Fuel Cost" -> {
-                container.findViewById<TextInputLayout>(R.id.tilFuelConsumption)?.visibility = View.VISIBLE
+                container.findViewById<TextInputLayout>(R.id.tilFuelAmount)?.visibility = View.VISIBLE
                 container.findViewById<TextInputLayout>(R.id.tilPricePerUnit)?.visibility = View.VISIBLE
             }
             "Cost per Distance" -> {
-                container.findViewById<TextInputLayout>(R.id.tilFuelConsumption)?.visibility = View.VISIBLE
+                container.findViewById<TextInputLayout>(R.id.tilFuelAmount)?.visibility = View.VISIBLE
                 container.findViewById<TextInputLayout>(R.id.tilPricePerUnit)?.visibility = View.VISIBLE
                 container.findViewById<TextInputLayout>(R.id.tilDistance)?.visibility = View.VISIBLE
             }
