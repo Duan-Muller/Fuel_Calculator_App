@@ -11,7 +11,7 @@ class VehicleDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
     companion object {
         private const val DATABASE_NAME = "Gasify Database"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 3
         private const val TABLE_VEHICLES = "vehicles"
 
         // Column names
@@ -75,47 +75,73 @@ class VehicleDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     fun getVehiclesForUser(userId: String): List<Vehicle> {
         val vehicles = mutableListOf<Vehicle>()
         val db = this.readableDatabase
-        val selection = "$COLUMN_USER_ID = ?"
-        val selectionArgs = arrayOf(userId)
 
-        val cursor = db.query(
-            TABLE_VEHICLES,
-            null,
-            selection,
-            selectionArgs,
-            null,
-            null,
-            null
-        )
+        try {
+            // First verify table exists
+            val tableCheck = "SELECT name FROM sqlite_master WHERE type='table' AND name='$TABLE_VEHICLES'"
+            val checkCursor = db.rawQuery(tableCheck, null)
+            val tableExists = checkCursor.count > 0
+            checkCursor.close()
 
-        with(cursor) {
-            while (moveToNext()) {
-                vehicles.add(
-                    Vehicle(
-                        vehicleId = getInt(getColumnIndexOrThrow(COLUMN_VEHICLE_ID)),
-                        userId = getString(getColumnIndexOrThrow(COLUMN_USER_ID)),
-                        fuelType = getString(getColumnIndexOrThrow(COLUMN_FUEL_TYPE)),
-                        vehicleType = getString(getColumnIndexOrThrow(COLUMN_VEHICLE_TYPE)),
-                        brand = getString(getColumnIndexOrThrow(COLUMN_BRAND)),
-                        model = getString(getColumnIndexOrThrow(COLUMN_MODEL)),
-                        engineSize = getString(getColumnIndexOrThrow(COLUMN_ENGINE_SIZE)),
-                        transmission = getString(getColumnIndexOrThrow(COLUMN_TRANSMISSION)),
-                        year = getInt(getColumnIndexOrThrow(COLUMN_YEAR)),
-                        fuelEfficiency = getDouble(getColumnIndexOrThrow(COLUMN_FUEL_EFFICIENCY)),
-                        mileage = getInt(getColumnIndexOrThrow(COLUMN_MILEAGE)),
-                        region = getString(getColumnIndexOrThrow(COLUMN_REGION)),
-                        isActive = getInt(getColumnIndexOrThrow(COLUMN_IS_ACTIVE)) == 1
-                    )
-                )
+            if (!tableExists) {
+                // Recreate table if it doesn't exist
+                onCreate(db)
+                return emptyList()
             }
+
+            val selection = "$COLUMN_USER_ID = ?"
+            val selectionArgs = arrayOf(userId)
+
+            val cursor = db.query(
+                TABLE_VEHICLES,
+                null,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+            )
+
+            with(cursor) {
+                while (moveToNext()) {
+                    vehicles.add(
+                        Vehicle(
+                            vehicleId = getInt(getColumnIndexOrThrow(COLUMN_VEHICLE_ID)),
+                            userId = getString(getColumnIndexOrThrow(COLUMN_USER_ID)),
+                            fuelType = getString(getColumnIndexOrThrow(COLUMN_FUEL_TYPE)),
+                            vehicleType = getString(getColumnIndexOrThrow(COLUMN_VEHICLE_TYPE)),
+                            brand = getString(getColumnIndexOrThrow(COLUMN_BRAND)),
+                            model = getString(getColumnIndexOrThrow(COLUMN_MODEL)),
+                            engineSize = getString(getColumnIndexOrThrow(COLUMN_ENGINE_SIZE)),
+                            transmission = getString(getColumnIndexOrThrow(COLUMN_TRANSMISSION)),
+                            year = getInt(getColumnIndexOrThrow(COLUMN_YEAR)),
+                            fuelEfficiency = getDouble(getColumnIndexOrThrow(COLUMN_FUEL_EFFICIENCY)),
+                            mileage = getInt(getColumnIndexOrThrow(COLUMN_MILEAGE)),
+                            region = getString(getColumnIndexOrThrow(COLUMN_REGION)),
+                            isActive = getInt(getColumnIndexOrThrow(COLUMN_IS_ACTIVE)) == 1
+                        )
+                    )
+                }
+            }
+            cursor.close()
+            return vehicles
+        } catch (e: Exception) {
+            // Log error and return empty list instead of crashing
+            e.printStackTrace()
+            return emptyList()
         }
-        cursor.close()
-        return vehicles
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_VEHICLES")
-        onCreate(db)
+        //Check if table exists first
+        val tableCheck = "SELECT name FROM sqlite_master WHERE type='table' AND name='$TABLE_VEHICLES'"
+        val cursor = db.rawQuery(tableCheck, null)
+        val tableExists = cursor.count > 0
+        cursor.close()
+
+        if (!tableExists) {
+            onCreate(db)
+        }
     }
 
     fun addVehicle(vehicle: Vehicle): Long {
@@ -137,34 +163,94 @@ class VehicleDBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         return db.insert(TABLE_VEHICLES, null, values)
     }
 
-    fun getAllVehicles(): List<Vehicle> {
-        val vehicles = mutableListOf<Vehicle>()
+    fun getVehicleById(vehicleId: Int): Vehicle? {
         val db = this.readableDatabase
-        val cursor = db.query(TABLE_VEHICLES, null, null, null, null, null, null)
+        val cursor = db.query(
+            TABLE_VEHICLES,
+            null,
+            "$COLUMN_VEHICLE_ID = ?",
+            arrayOf(vehicleId.toString()),
+            null,
+            null,
+            null
+        )
 
-        with(cursor) {
-            while (moveToNext()) {
-                vehicles.add(
-                    Vehicle(
-                        vehicleId = getInt(getColumnIndexOrThrow(COLUMN_VEHICLE_ID)),
-                        fuelType = getString(getColumnIndexOrThrow(COLUMN_FUEL_TYPE)),
-                        vehicleType = getString(getColumnIndexOrThrow(COLUMN_VEHICLE_TYPE)),
-                        brand = getString(getColumnIndexOrThrow(COLUMN_BRAND)),
-                        model = getString(getColumnIndexOrThrow(COLUMN_MODEL)),
-                        engineSize = getString(getColumnIndexOrThrow(COLUMN_ENGINE_SIZE)),
-                        transmission = getString(getColumnIndexOrThrow(COLUMN_TRANSMISSION)),
-                        year = getInt(getColumnIndexOrThrow(COLUMN_YEAR)),
-                        fuelEfficiency = getDouble(getColumnIndexOrThrow(COLUMN_FUEL_EFFICIENCY)),
-                        mileage = getInt(getColumnIndexOrThrow(COLUMN_MILEAGE)),
-                        region = getString(getColumnIndexOrThrow(COLUMN_REGION)),
-                        isActive = getInt(getColumnIndexOrThrow(COLUMN_IS_ACTIVE)) == 1,
-                        userId = getString(getColumnIndexOrThrow(COLUMN_USER_ID))
-                    )
-                )
-            }
+        return if (cursor.moveToFirst()) {
+            val vehicle = Vehicle(
+                vehicleId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_VEHICLE_ID)),
+                userId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)),
+                fuelType = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FUEL_TYPE)),
+                vehicleType = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_VEHICLE_TYPE)),
+                brand = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BRAND)),
+                model = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MODEL)),
+                engineSize = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ENGINE_SIZE)),
+                transmission = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRANSMISSION)),
+                year = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_YEAR)),
+                fuelEfficiency = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_FUEL_EFFICIENCY)),
+                mileage = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MILEAGE)),
+                region = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REGION)),
+                isActive = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_ACTIVE)) == 1
+            )
+            cursor.close()
+            vehicle
+        } else {
+            cursor.close()
+            null
         }
-        cursor.close()
-        return vehicles
+    }
+
+    fun getActiveVehicle(userId: String): Vehicle? {
+        val db = this.readableDatabase
+        val cursor = db.query(
+            TABLE_VEHICLES,
+            null,
+            "$COLUMN_USER_ID = ? AND $COLUMN_IS_ACTIVE = ?",
+            arrayOf(userId, "1"),
+            null,
+            null,
+            null
+        )
+
+        return if (cursor.moveToFirst()) {
+            val vehicle = Vehicle(
+                vehicleId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_VEHICLE_ID)),
+                userId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)),
+                fuelType = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FUEL_TYPE)),
+                vehicleType = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_VEHICLE_TYPE)),
+                brand = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BRAND)),
+                model = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MODEL)),
+                engineSize = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ENGINE_SIZE)),
+                transmission = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TRANSMISSION)),
+                year = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_YEAR)),
+                fuelEfficiency = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_FUEL_EFFICIENCY)),
+                mileage = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MILEAGE)),
+                region = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REGION)),
+                isActive = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_ACTIVE)) == 1
+            )
+            cursor.close()
+            vehicle
+        } else {
+            cursor.close()
+            null
+        }
+    }
+
+    fun updateVehicleMileage(vehicleId: Int, newMileage: Int) {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_MILEAGE, newMileage)
+        }
+        db.update(
+            TABLE_VEHICLES,
+            values,
+            "$COLUMN_VEHICLE_ID = ?",
+            arrayOf(vehicleId.toString())
+        )
+    }
+
+    fun removeVehicle(vehicleId: Int) {
+        val db = this.writableDatabase
+        db.delete(TABLE_VEHICLES, "$COLUMN_VEHICLE_ID = ?", arrayOf(vehicleId.toString()))
     }
 
 }

@@ -228,29 +228,7 @@ class AuthPresenter(
 
     //Forgot Password handling to send email to reset password
     override fun onForgotPasswordClicked() {
-        val email = view?.getCurrentEmail() ?: ""
-        if (email.isEmpty() || !isValidEmail(email)) {
-            view?.showError("Please enter a valid email")
-            return
-        }
-        view?.showLoading()
-        viewModelScope.launch {
-            try {
-                authManager.sendPasswordResetEmail(email).fold(
-                    onSuccess = {
-                        view?.hideLoading()
-                        view?.showSuccess("Password reset email sent")
-                    },
-                    onFailure = { exception ->
-                        view?.hideLoading()
-                        view?.showError("Failed to send password reset email: ${exception.message}")
-                    }
-                )
-            } catch (e: Exception) {
-                view?.hideLoading()
-                view?.showError("Failed to send password reset email: ${e.message}")
-            }
-        }
+        view?.showForgotPasswordDialog()
     }
 
     override fun onDestroy() {

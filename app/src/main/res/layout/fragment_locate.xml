@@ -43,39 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@id/bottomActions"
         app:layout_constraintTop_toBottomOf="@id/searchContainer" />
 
-    <!-- Bottom Actions -->
-    <LinearLayout
-        android:id="@+id/bottomActions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <!-- Start Trip Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnStartTrip"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:text="Start Trip"
-            app:iconGravity="textStart" />
-
-        <!-- Visit History Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnVisitHistory"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:text="Visit History"
-            app:iconGravity="textStart" />
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

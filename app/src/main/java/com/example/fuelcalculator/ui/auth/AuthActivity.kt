@@ -1,6 +1,8 @@
 package com.example.fuelcalculator.ui.auth
 
+import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -9,14 +11,17 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.fuelcalculator.R
 import com.example.fuelcalculator.data.repository.FirebaseAuthManager
 import com.example.fuelcalculator.data.repository.SessionManager
 import com.example.fuelcalculator.ui.home.HomeFragment
 import com.example.fuelcalculator.ui.main.MainActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.launch
 
 class AuthActivity : AppCompatActivity(), AuthContract.View {
 
@@ -40,6 +45,10 @@ class AuthActivity : AppCompatActivity(), AuthContract.View {
     private lateinit var passwordInput: TextInputEditText
     private lateinit var confirmPasswordInput: TextInputEditText
     private lateinit var progressBar: ProgressBar
+    private lateinit var googleLoginButton: View
+    private lateinit var facebookLoginButton: View
+    private lateinit var githubLoginButton: View
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,6 +104,9 @@ class AuthActivity : AppCompatActivity(), AuthContract.View {
         passwordInput = findViewById(R.id.passwordInput)
         confirmPasswordInput = findViewById(R.id.confirmPasswordInput)
         progressBar = findViewById(R.id.progressBar)
+        googleLoginButton = findViewById(R.id.googleLoginButton)
+        facebookLoginButton = findViewById(R.id.facebookLoginButton)
+        githubLoginButton = findViewById(R.id.githubLoginButton)
     }
 
     private fun setupTabLayout() {
@@ -129,6 +141,27 @@ class AuthActivity : AppCompatActivity(), AuthContract.View {
         forgotPasswordText.setOnClickListener {
             presenter.onForgotPasswordClicked()
         }
+
+        // Social media login redirects
+        val comingSoonMessage = "Full integration coming soon! Redirecting to login page..."
+
+        googleLoginButton.setOnClickListener {
+            Toast.makeText(this, comingSoonMessage, Toast.LENGTH_SHORT).show()
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://accounts.google.com/signin"))
+            startActivity(intent)
+        }
+
+        facebookLoginButton.setOnClickListener {
+            Toast.makeText(this, comingSoonMessage, Toast.LENGTH_SHORT).show()
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/login"))
+            startActivity(intent)
+        }
+
+        githubLoginButton.setOnClickListener {
+            Toast.makeText(this, comingSoonMessage, Toast.LENGTH_SHORT).show()
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/login"))
+            startActivity(intent)
+        }
     }
 
     override fun showLoginView() {
@@ -141,6 +174,51 @@ class AuthActivity : AppCompatActivity(), AuthContract.View {
         rememberMeCheckbox.visibility = View.VISIBLE
         forgotPasswordText.visibility = View.VISIBLE
         authButton.text = getString(R.string.login)
+    }
+
+    override fun showForgotPasswordDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_forgot_password, null)
+        val emailInput = dialogView.findViewById<TextInputEditText>(R.id.emailInput)
+
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle("Reset Password")
+            .setView(dialogView)
+            .setPositiveButton("Reset", null) // Set to null initially
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+
+        dialog.show()
+
+        // Set click listener after dialog is shown to prevent automatic dismissal
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val email = emailInput.text.toString()
+            if (email.isEmpty()) {
+                showError("Please enter your email")
+                return@setOnClickListener
+            }
+
+            showLoading()
+            lifecycleScope.launch {
+                try {
+                    authManager.sendPasswordResetEmail(email).fold(
+                        onSuccess = {
+                            hideLoading()
+                            showSuccess("Password reset email sent")
+                            dialog.dismiss()
+                        },
+                        onFailure = { exception ->
+                            hideLoading()
+                            showError("Failed to send password reset email: ${exception.message}")
+                        }
+                    )
+                } catch (e: Exception) {
+                    hideLoading()
+                    showError("Failed to send password reset email: ${e.message}")
+                }
+            }
+        }
     }
 
     override fun showSignUpView() {

@@ -1,20 +1,27 @@
 package com.example.fuelcalculator.ui.home
 
 import androidx.lifecycle.ViewModel
+import com.example.fuelcalculator.data.db.RefuelDBHelper
 import com.example.fuelcalculator.data.repository.FirebaseAuthManager
 
 class HomePresenter(
     private var view: HomeContract.View?,
-    private val authManager: FirebaseAuthManager
+    private val authManager: FirebaseAuthManager,
+    private val refuelDBHelper: RefuelDBHelper
 ) : ViewModel(), HomeContract.Presenter {
 
     override fun onViewCreated() {
-        //TODO: Load user expenses and refuel history
-        view?.updateExpenseAmount("R800,00")// Placeholder data
+        updateExpenseAmount()
     }
 
-    override fun onTripButtonClicked() {
-        view?.navigateToTrip()
+    private fun updateExpenseAmount() {
+        val currentUserId = authManager.getCurrentUserId()
+        if (currentUserId != null) {
+            val total = refuelDBHelper.getCurrentMonthTotal(currentUserId)
+            view?.updateExpenseAmount("R${String.format("%.2f", total)}")
+        } else {
+            view?.updateExpenseAmount("R0.00")
+        }
     }
 
     override fun onReportButtonClicked() {

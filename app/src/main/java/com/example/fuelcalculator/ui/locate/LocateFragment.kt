@@ -22,7 +22,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
-import com.google.android.material.button.MaterialButton
 import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.Places
 import com.google.android.material.textfield.TextInputEditText
@@ -33,8 +32,6 @@ class LocateFragment : Fragment(), OnMapReadyCallback {
     private val TAG = "LocateFragment"
 
     private var googleMap: GoogleMap? = null
-    private lateinit var btnStartTrip: MaterialButton
-    private lateinit var btnVisitHistory: MaterialButton
     private lateinit var searchEditText: TextInputEditText
     private var lastKnownLocation: LatLng? = null
 
@@ -82,12 +79,9 @@ class LocateFragment : Fragment(), OnMapReadyCallback {
 
         initializeViews(view)
         setupSearchBar()
-        setupClickListeners()
     }
 
     private fun initializeViews(view: View) {
-        btnStartTrip = view.findViewById(R.id.btnStartTrip)
-        btnVisitHistory = view.findViewById(R.id.btnVisitHistory)
         searchEditText = view.findViewById(R.id.etSearch)
     }
 
@@ -101,21 +95,46 @@ class LocateFragment : Fragment(), OnMapReadyCallback {
             }
 
             setHint("Search Fuel Station or Area")
+
+            // Add more place fields
             setPlaceFields(listOf(
                 Place.Field.ID,
                 Place.Field.NAME,
                 Place.Field.LAT_LNG,
                 Place.Field.ADDRESS,
-                Place.Field.TYPES
+                Place.Field.TYPES,
+                Place.Field.BUSINESS_STATUS,
+                Place.Field.RATING,
+                Place.Field.USER_RATINGS_TOTAL
             ))
+
+            // Set type filter to prioritize gas stations
+            setTypesFilter(listOf("gas_station"))
         }
 
         autocompleteFragment?.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
                 place.latLng?.let { latLng ->
                     lastKnownLocation = latLng
+
+                    // Clear existing markers
+                    googleMap?.clear()
+
+                    // Add marker for the selected place
+                    googleMap?.addMarker(
+                        MarkerOptions()
+                            .position(latLng)
+                            .title(place.name)
+                            .snippet(place.address)
+                    )
+
+                    // Move camera to the location with zoom
                     moveCameraToLocation(latLng)
-                    searchNearbyFuelStations(latLng)
+
+                    // If it's not specifically a gas station, search for nearby stations
+                    if (!place.types.contains(Place.Type.GAS_STATION)) {
+                        searchNearbyFuelStations(latLng)
+                    }
                 }
             }
 
@@ -138,7 +157,7 @@ class LocateFragment : Fragment(), OnMapReadyCallback {
                         ).show()
                     }
                     CommonStatusCodes.CANCELED -> {
-                        // User canceled, no need to show error
+                        // User canceled
                         Log.d(TAG, "Search canceled by user")
                     }
                     else -> {
@@ -239,20 +258,11 @@ class LocateFragment : Fragment(), OnMapReadyCallback {
             MarkerOptions()
                 .position(location)
                 .title(title)
-                .snippet("Fuel Station")
-        )
-    }
-
-    private fun setupClickListeners() {
-        btnStartTrip.setOnClickListener {
-            // TODO: Implement start trip functionality
-        }
-
-        btnVisitHistory.setOnClickListener {
-            // TODO: Implement visit history functionality
+                .snippet("Tap for directions")
+        )?.apply {
+            tag = "fuel_station"
         }
     }
-
     private fun enableMyLocation() {
         try {
             googleMap?.isMyLocationEnabled = true
@@ -278,5 +288,11 @@ class LocateFragment : Fragment(), OnMapReadyCallback {
         // Set default location (Johannesburg)
         val defaultLocation = LatLng(-26.2041, 28.0473)
         moveCameraToLocation(defaultLocation)
+
+        // Add marker click listener
+        googleMap?.setOnMarkerClickListener { marker ->
+            marker.showInfoWindow()
+            true
+        }
     }
 }

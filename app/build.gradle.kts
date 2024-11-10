@@ -36,6 +36,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 }
 
@@ -65,6 +66,11 @@ dependencies {
     // Coroutines
     implementation(libs.kotlinx.coroutines.play.services)
 
+    // PDF
+    implementation(libs.itextpdf)
+
+    implementation(libs.androidx.lifecycle.runtime.ktx.v287)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.cardview)
     implementation(libs.lottie.compose)
     implementation("com.google.android.material:material:1.12.0")

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="stationInput" type="id"/>
+    <item name="priceInput" type="id"/>
+    <item name="refuelTypeInput" type="id"/>
+    <item name="btnCancel" type="id"/>
+    <item name="btnSave" type="id"/>
+</resources>

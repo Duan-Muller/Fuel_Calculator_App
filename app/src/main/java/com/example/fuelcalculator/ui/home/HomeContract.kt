@@ -7,7 +7,6 @@ interface HomeContract {
     interface View {
 
         //Navigation methods
-        fun navigateToTrip()
         fun navigateToReport()
         fun navigateToProfile()
         fun navigateToAllHistory()
@@ -28,7 +27,6 @@ interface HomeContract {
     interface Presenter {
 
         fun onViewCreated()
-        fun onTripButtonClicked()
         fun onReportButtonClicked()
         fun onProfileButtonClicked()
         fun onSeeAllClicked()
