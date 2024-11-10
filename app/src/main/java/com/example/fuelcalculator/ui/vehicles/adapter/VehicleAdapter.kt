@@ -26,6 +26,8 @@ class VehicleAdapter : RecyclerView.Adapter<VehicleAdapter.VehicleViewHolder>() 
                 append(vehicle.engineSize)
                 append(" • ")
                 append(vehicle.transmission)
+                append(" • ")
+                append("${vehicle.mileage} km")
             }
             activeStatus.visibility = if (vehicle.isActive) View.VISIBLE else View.GONE
         }

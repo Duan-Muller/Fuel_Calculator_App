@@ -39,6 +39,7 @@ class MyVehiclesFragment : Fragment() {
     private lateinit var rvVehicles: RecyclerView
     private lateinit var btnAddVehicle: FloatingActionButton
     private lateinit var btnSetActive: FloatingActionButton
+    private lateinit var btnRemoveVehicle: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,6 +66,7 @@ class MyVehiclesFragment : Fragment() {
         //Initialize buttons
         btnAddVehicle = view.findViewById(R.id.btnAddVehicle)
         btnSetActive = view.findViewById(R.id.btnSetActive)
+        btnRemoveVehicle = view.findViewById(R.id.btnRemoveVehicle)
     }
 
     private fun setupRecyclerView() {
@@ -85,6 +87,54 @@ class MyVehiclesFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
+
+        btnRemoveVehicle.setOnClickListener {
+            showRemoveVehicleDialog()
+        }
+
+    }
+
+    private fun showRemoveVehicleDialog() {
+        try {
+            val dbHelper = VehicleDBHelper(requireContext())
+            val vehicles = dbHelper.getVehiclesForUser(authManager.requireCurrentUserId())
+
+            if (vehicles.isEmpty()) {
+                showError("No vehicles to remove")
+                return
+            }
+
+            val vehicleNames = vehicles.map { "${it.brand} ${it.model} (${it.year})" }
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Remove Vehicle")
+                .setItems(vehicleNames.toTypedArray()) { dialog, which ->
+                    // Show confirmation dialog
+                    val selectedVehicle = vehicles[which]
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Confirm Removal")
+                        .setMessage("Are you sure you want to remove ${selectedVehicle.brand} ${selectedVehicle.model}?")
+                        .setPositiveButton("Remove") { confirmDialog, _ ->
+                            // Remove the vehicle
+                            dbHelper.removeVehicle(selectedVehicle.vehicleId)
+                            refreshVehicleList()
+                            showError("Vehicle removed successfully")
+                            confirmDialog.dismiss()
+                        }
+                        .setNegativeButton("Cancel") { confirmDialog, _ ->
+                            confirmDialog.dismiss()
+                        }
+                        .show()
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        } catch (e: IllegalStateException) {
+            startActivity(Intent(requireContext(), AuthActivity::class.java))
+            requireActivity().finish()
+        }
     }
 
     private fun filterVehicles() {
@@ -103,7 +153,6 @@ class MyVehiclesFragment : Fragment() {
             requireActivity().finish()
         }
     }
-
 
     private fun setupClickListeners() {
         btnAddVehicle.setOnClickListener {

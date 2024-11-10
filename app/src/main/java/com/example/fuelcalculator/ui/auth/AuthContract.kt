@@ -22,6 +22,7 @@ interface AuthContract {
         fun setRememberMe(rememberMe: Boolean)
         fun isRememberMeChecked(): Boolean
         fun setUsername(username: String)
+        fun showForgotPasswordDialog()
     }
 
     interface Presenter {

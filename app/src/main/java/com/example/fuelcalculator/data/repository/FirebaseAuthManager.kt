@@ -80,6 +80,16 @@ class FirebaseAuthManager {
         return getCurrentUserId() ?: throw IllegalStateException("No authenticated user found")
     }
 
+    suspend fun getUserDisplayName(userId: String): Result<String?> = withContext(Dispatchers.IO) {
+        try {
+            val userDoc = db.collection("users").document(userId).get().await()
+            val username = userDoc.getString("username")
+            return@withContext Result.success(username)
+        } catch (e: Exception) {
+            return@withContext Result.failure(e)
+        }
+    }
+
     fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
     fun signOut() {

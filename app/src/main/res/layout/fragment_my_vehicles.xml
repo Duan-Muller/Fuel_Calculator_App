@@ -131,6 +131,33 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
+        <!-- Remove Vehicle Button -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnRemoveVehicle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Remove Vehicle"
+                app:fabSize="normal"
+                app:tint="@android:color/darker_gray"
+                app:backgroundTint="@android:color/white"
+                app:srcCompat="@drawable/ic_delete" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Remove Vehicle"
+                android:textColor="#666666"
+                android:textSize="12sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

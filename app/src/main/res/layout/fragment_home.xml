@@ -146,15 +146,15 @@
             android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnTrip"
+                android:id="@+id/btnRefuel"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:insetLeft="0dp"
                 android:insetTop="0dp"
                 android:insetRight="0dp"
                 android:insetBottom="0dp"
-                android:contentDescription="@string/trip_button"
-                app:icon="@drawable/ic_steering_wheel"
+                android:contentDescription="@string/refuel_button"
+                app:icon="@drawable/ic_gas_station"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
                 app:iconSize="24dp"
@@ -166,7 +166,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Trip"
+                android:text="Refuel"
                 android:textColor="#666666"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -248,5 +248,19 @@
         android:paddingHorizontal="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/refuelHistoryHeader" />
+
+    <TextView
+        android:id="@+id/tvNoHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No refuel history"
+        android:textColor="#666666"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/refuelHistoryHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

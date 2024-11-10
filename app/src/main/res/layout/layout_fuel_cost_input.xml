@@ -91,6 +91,23 @@
                 android:inputType="numberDecimal" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEfficiency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="Fuel Efficiency (L/100km)">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEfficiency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
 
 </LinearLayout>

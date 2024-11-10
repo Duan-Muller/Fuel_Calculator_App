@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Fuel Calculator</string>
+    <string name="app_name">Gasify</string>
     <string name="enjoy_hassle_free_fuel_savings">Enjoy hassle-free fuel savings</string>
     <string name="app_logo">Gasify Logo</string>
     <string name="car_illustration">Car Illustration</string>
@@ -24,4 +24,5 @@
     <string name="username">Username</string>
     <string name="username_input">Enter your username</string>
     <string name="google_maps_key">AIzaSyCyiLkV8WHbSANQA1Y8d4Ru-R1phaQoGOo</string>
+    <string name="refuel_button">refuel_button</string>
 </resources>

@@ -10,12 +10,19 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.fuelcalculator.R
+import com.example.fuelcalculator.data.db.FuelPriceDBHelper
+import com.example.fuelcalculator.data.db.VehicleDBHelper
+import com.example.fuelcalculator.data.repository.FirebaseAuthManager
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 class CalculatorFragment : Fragment() {
+
+    private lateinit var vehicleDBHelper: VehicleDBHelper
+    private lateinit var fuelPriceDBHelper: FuelPriceDBHelper
+    private lateinit var authManager: FirebaseAuthManager
 
     private lateinit var calculationTypeDropdown: TextInputLayout
     private lateinit var dropdownText: AutoCompleteTextView
@@ -40,9 +47,33 @@ class CalculatorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        vehicleDBHelper = VehicleDBHelper(requireContext())
+        fuelPriceDBHelper = FuelPriceDBHelper(requireContext())
+        authManager = FirebaseAuthManager()
+
         initializeViews(view)
         setupDropdown()
         setupCalculateButton()
+    }
+
+    private fun getActiveVehicleFuelPrice() {
+        val userId = authManager.getCurrentUserId()
+        userId?.let { uid ->
+            val activeVehicle = vehicleDBHelper.getActiveVehicle(uid)
+            activeVehicle?.let { vehicle ->
+                val currentPrice = fuelPriceDBHelper.getCurrentFuelPrice(
+                    fuelType = vehicle.fuelType,
+                    region = vehicle.region
+                )
+
+                // Fill the price input when available
+                currentPrice?.let { price ->
+                    inputContainer.findViewById<TextInputEditText>(R.id.etPricePerUnit)?.apply {
+                        setText(String.format("%.2f", price))
+                    }
+                }
+            }
+        }
     }
 
     private fun initializeViews(view: View) {
@@ -76,6 +107,8 @@ class CalculatorFragment : Fragment() {
             //Set up cost type dropdown if fuel cost is selected
             if (CalculationType.values()[position] == CalculationType.FUEL_COST) {
                 setupCostTypeDropdown()
+                // Fill the price after the layout is inflated
+                getActiveVehicleFuelPrice()
             }
         }
     }
@@ -106,6 +139,7 @@ class CalculatorFragment : Fragment() {
         container.findViewById<TextInputLayout>(R.id.tilPricePerUnit)?.visibility = View.GONE
         container.findViewById<TextInputLayout>(R.id.tilDistance)?.visibility = View.GONE
         container.findViewById<TextInputLayout>(R.id.tilBudget)?.visibility = View.GONE
+        container.findViewById<TextInputLayout>(R.id.tilEfficiency)?.visibility = View.GONE
 
         //Show relevant fields based on calculation type
         when (costType) {

@@ -8,9 +8,10 @@ import androidx.fragment.app.Fragment
 import com.example.fuelcalculator.R
 import com.example.fuelcalculator.ui.calculator.CalculatorFragment
 import com.example.fuelcalculator.ui.common.BottomNavHelper
+import com.example.fuelcalculator.ui.history.RefuelHistoryFragment
 import com.example.fuelcalculator.ui.home.HomeFragment
 import com.example.fuelcalculator.ui.locate.LocateFragment
-import com.example.fuelcalculator.ui.settings.SettingsActivity
+import com.example.fuelcalculator.ui.profile.ProfileActivity
 import com.example.fuelcalculator.ui.vehicles.MyVehiclesFragment
 
 class MainActivity : AppCompatActivity() {
@@ -72,9 +73,16 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
+    fun navigateToRefuelHistory() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, RefuelHistoryFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+
     // Method to navigate to Settings
     fun navigateToSettings() {
-        startActivity(Intent(this, SettingsActivity::class.java))
+        startActivity(Intent(this, ProfileActivity::class.java))
     }
 
     //Updating navigation depending on where user is currently
