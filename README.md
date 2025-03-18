@@ -35,11 +35,12 @@ Our Fuel Calculator App is a comprehensive tool for vehicle owners to manage the
    - Locate gas stations in the vicinity
    - View basic information about each station (e.g., price, distance)
 
-## Technologies Used (To be updated further)
+## Technologies Used
 
 - Kotlin
 - Android Studio
 - Firebase
+- SQLite
 
 ## Contributing
 
@@ -52,4 +53,4 @@ This project is part of our final year studies. While we appreciate any feedback
 
 ---
 
-Last updated: 30/10/2024
+Last updated: 19/03/2024
